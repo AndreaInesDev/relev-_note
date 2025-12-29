@@ -1,5 +1,7 @@
 package com.andrea.eleves_note.service;
 
+import com.andrea.eleves_note.exception.FiliereNotFound;
+import com.andrea.eleves_note.exception.MatiereNotFound;
 import com.andrea.eleves_note.model.Filiere;
 import com.andrea.eleves_note.model.Matiere;
 import com.andrea.eleves_note.ripository.FiliereRepository;
@@ -22,21 +24,23 @@ public class MatiereService {
 
     public Matiere saveMatiere(Matiere matiere){
         if (matiere.getFiliere() == null || matiere.getFiliere().getId() == null){
-            throw new RuntimeException("filiere manquante");
+            throw new FiliereNotFound("filiere manquante");
         }
        Long idFil = matiere.getFiliere().getId();
         Optional<Filiere> filiereOptional = filiereRepository.findById(idFil);
         if (!filiereOptional.isPresent()){
-            throw new RuntimeException("Cette filiere n'existe pas");
+            throw new FiliereNotFound("Cette filiere n'existe pas");
         }
         matiere.setFiliere(filiereOptional.get());
+
+
         return matiereRepository.save(matiere);
     }
 
     public boolean deleteMatiere(Long id){
         Optional<Matiere> optionalMatiere = matiereRepository.findById(id);
         if (!optionalMatiere.isPresent()){
-            throw new RuntimeException("Cette matiere n'existe pas");
+            throw new MatiereNotFound("Cette matiere n'existe pas");
         }
         matiereRepository.deleteById(id);
         return true;

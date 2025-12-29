@@ -36,6 +36,11 @@ public class CustomException {
         return builedResponse(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(MatiereNotFound.class)
+    public ResponseEntity<AppiError> matiereInexistante(MatiereNotFound e){
+        return builedResponse(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
     private ResponseEntity<AppiError> builedResponse(String message, HttpStatus status){
         AppiError error = new AppiError();
 
