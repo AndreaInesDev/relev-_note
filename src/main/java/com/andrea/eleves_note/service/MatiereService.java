@@ -9,6 +9,7 @@ import com.andrea.eleves_note.ripository.MatiereRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,18 +24,28 @@ public class MatiereService {
     }
 
     public Matiere saveMatiere(Matiere matiere){
-        if (matiere.getFiliere() == null || matiere.getFiliere().getId() == null){
-            throw new FiliereNotFound("filiere manquante");
-        }
-       Long idFil = matiere.getFiliere().getId();
+       // if (matiere.getFiliere() == null || matiere.getFiliere().getId() == null){
+        //    throw new FiliereNotFound("filiere manquante");
+        //}
+       /*Long idFil = matiere.getFiliere().getId();
         Optional<Filiere> filiereOptional = filiereRepository.findById(idFil);
         if (!filiereOptional.isPresent()){
             throw new FiliereNotFound("Cette filiere n'existe pas");
         }
-        matiere.setFiliere(filiereOptional.get());
+        matiere.setFiliere(filiereOptional.get());*/
 
 
         return matiereRepository.save(matiere);
+    }
+
+    public List<Matiere> saveAllMatiere(List<Matiere> matieres){
+        List<Matiere> matiereSaved= new ArrayList<>();
+
+        for (Matiere matiere : matieres){
+            matiereSaved.add(this.saveMatiere(matiere));
+        }
+
+        return matiereSaved;
     }
 
     public boolean deleteMatiere(Long id){

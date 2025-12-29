@@ -16,7 +16,7 @@ public class StudentController {
 
     private final StudentService studentService ;
 
-    @GetMapping
+    @GetMapping(path = "/get/all")
     public ResponseEntity<List<Student>> getAllStudent(){
             return new ResponseEntity<>(studentService.getAll(), HttpStatus.OK);
     }

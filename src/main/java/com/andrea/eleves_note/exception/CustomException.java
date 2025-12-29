@@ -41,6 +41,11 @@ public class CustomException {
         return builedResponse(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(NoteNotFount.class)
+    public ResponseEntity<AppiError> noteNoteFoundHandle(NoteNotFount e){
+        return builedResponse(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
     private ResponseEntity<AppiError> builedResponse(String message, HttpStatus status){
         AppiError error = new AppiError();
 

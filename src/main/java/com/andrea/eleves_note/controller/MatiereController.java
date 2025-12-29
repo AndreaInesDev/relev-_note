@@ -2,7 +2,6 @@ package com.andrea.eleves_note.controller;
 
 
 import com.andrea.eleves_note.model.Matiere;
-import com.andrea.eleves_note.ripository.MatiereRepository;
 import com.andrea.eleves_note.service.MatiereService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,6 +24,11 @@ public class MatiereController {
     @PostMapping
     public ResponseEntity<Matiere> saveMatiere(@RequestBody Matiere matiere){
         return new ResponseEntity<>(matiereService.saveMatiere(matiere), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/batch")
+    public ResponseEntity<?> saveAllMatiere(@RequestBody List<Matiere> matieres){
+        return new ResponseEntity<>(matiereService.saveAllMatiere(matieres), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

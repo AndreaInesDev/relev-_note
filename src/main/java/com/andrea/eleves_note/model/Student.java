@@ -7,6 +7,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "students")
+
 @Data
 public class Student {
 
@@ -23,7 +24,7 @@ public class Student {
     @JoinColumn(name = "id_filiere")
     private Filiere filiere ;
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Note> notes;
 
 }

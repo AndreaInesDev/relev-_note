@@ -1,6 +1,6 @@
 package com.andrea.eleves_note.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -17,10 +17,10 @@ public class Filiere {
 
     private String libelle;
 
-    @OneToMany(mappedBy = "filiere")
+    @OneToMany(mappedBy = "filiere", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private Set<Student> students;
 
-    @OneToMany(mappedBy = "filiere")
+    @OneToMany(mappedBy = "filiere", cascade = CascadeType.ALL, orphanRemoval = true)
     private  Set<Matiere> matieres;
 }

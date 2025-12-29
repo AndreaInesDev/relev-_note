@@ -1,0 +1,93 @@
+package com.andrea.eleves_note.service;
+
+import com.andrea.eleves_note.Appreciations;
+import com.andrea.eleves_note.exception.MatiereNotFound;
+import com.andrea.eleves_note.exception.NoteNotFount;
+import com.andrea.eleves_note.exception.StudentNotFountException;
+import com.andrea.eleves_note.model.Matiere;
+import com.andrea.eleves_note.model.Note;
+import com.andrea.eleves_note.model.Student;
+import com.andrea.eleves_note.ripository.MatiereRepository;
+import com.andrea.eleves_note.ripository.NoteRepository;
+import com.andrea.eleves_note.ripository.StudentRepository;
+import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Not;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+public class NoteService {
+    private final NoteRepository noteRepository;
+    private final MatiereRepository matiereRepository;
+    private final StudentRepository studentRepository;
+
+    public List<Note> getAll(){
+       return noteRepository.findAll();
+    }
+
+    public Note saveNote(Note  note){
+       /* if (note.getMatiere() == null || note.getMatiere().getId() == null){
+            throw new MatiereNotFound("Vous n'avez pas renseigné la matiere");
+        }
+
+        Optional<Matiere> matiereOptional =matiereRepository.findById(note.getMatiere().getId());
+        if (!matiereOptional.isPresent()){
+            throw new MatiereNotFound("Cette matiere n'existe pas");
+        }
+
+        if (note.getStudent() == null || note.getStudent().getId() == null){
+            throw new StudentNotFountException("Vous n'avez pas renseigné l'etudiant");
+        }
+
+        Optional<Student> studentOptional = studentRepository.findById(note.getStudent().getId());
+        if (!studentOptional.isPresent()){
+            throw new StudentNotFountException("Cet etudiant n'existe pas");
+        }
+
+        note.setMatiere(note.getMatiere());
+        note.setStudent(note.getStudent());*/
+
+        double appreciation = note.getValeur();
+
+        if (appreciation >= 1 && appreciation <= 10){
+            note.setApprecications(Appreciations.FAIBLE);
+        }else if (appreciation >= 10 && appreciation <= 11 ){
+            note.setApprecications(Appreciations.PASSABLE);
+        } else if (appreciation >= 12 && appreciation <= 13) {
+            note.setApprecications(Appreciations.ASSEZ_BIEN);
+        } else if (appreciation >= 14 && appreciation <= 15) {
+            note.setApprecications(Appreciations.BIEN);
+        } else if (appreciation >= 16 && appreciation <= 17) {
+            note.setApprecications(Appreciations.TRES_BIEN);
+        } else if (appreciation >= 18 && appreciation <= 20) {
+            note.setApprecications(Appreciations.PARFAIT);
+        }else {
+            throw new RuntimeException("Impossible d'ajouter une valeur < 1 ou > 20");
+        }
+
+        return noteRepository.save(note);
+    }
+
+    public List<Note> saveAllNote(List<Note> notes){
+        List<Note> notes1 = new ArrayList<>();
+        for (Note note : notes){
+            notes1.add(this.saveNote(note));
+        }
+
+        return notes1;
+    }
+
+    public String deleteNote(Long id){
+        boolean notePresent = true;
+        if (!noteRepository.findById(id).isPresent()){
+            throw new NoteNotFount("Cette note n'existe pas");
+        }
+
+        noteRepository.deleteById(id);
+        return "La note a été supprimée avec succès";
+    }
+}
