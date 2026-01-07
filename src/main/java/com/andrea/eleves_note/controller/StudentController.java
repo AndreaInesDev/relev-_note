@@ -32,4 +32,9 @@ public class StudentController {
         studentService.deleteStudent(matricule);
         return new ResponseEntity<>("l'etudiant a été supprimé avec succès", HttpStatus.OK);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Student> updateStudent(@PathVariable String id, @RequestBody Student student){
+        return new ResponseEntity<>(studentService.updateStudent(id, student), HttpStatus.CREATED);
+    }
 }
