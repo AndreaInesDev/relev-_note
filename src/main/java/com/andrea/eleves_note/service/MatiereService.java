@@ -24,15 +24,15 @@ public class MatiereService {
     }
 
     public Matiere saveMatiere(Matiere matiere){
-       // if (matiere.getFiliere() == null || matiere.getFiliere().getId() == null){
-        //    throw new FiliereNotFound("filiere manquante");
-        //}
-       /*Long idFil = matiere.getFiliere().getId();
+        if (matiere.getFiliere() == null || matiere.getFiliere().getId() == null){
+            throw new FiliereNotFound("filiere manquante");
+        }
+       Long idFil = matiere.getFiliere().getId();
         Optional<Filiere> filiereOptional = filiereRepository.findById(idFil);
         if (!filiereOptional.isPresent()){
             throw new FiliereNotFound("Cette filiere n'existe pas");
         }
-        matiere.setFiliere(filiereOptional.get());*/
+        matiere.setFiliere(filiereOptional.get());
 
 
         return matiereRepository.save(matiere);
@@ -55,5 +55,15 @@ public class MatiereService {
         }
         matiereRepository.deleteById(id);
         return true;
+    }
+
+    public  Matiere updateMatiere(Long id, Matiere matiere){
+        Matiere matiere1 = matiereRepository.findById(id)
+                .orElseThrow(() -> new MatiereNotFound("Cette matiere n'xiste pas"));
+
+        matiere1.setLibelle(matiere.getLibelle());
+        matiere1.setLibelle(matiere.getLibelle());
+
+        return matiereRepository.save(matiere1);
     }
 }

@@ -36,4 +36,9 @@ public class MatiereController {
         return new ResponseEntity<>(matiereService.deleteMatiere(id), HttpStatus.OK);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Matiere> updateMatiere(@PathVariable Long id, @RequestBody Matiere matiere ){
+        return new ResponseEntity<>(matiereService.updateMatiere(id, matiere), HttpStatus.CREATED);
+    }
+
 }
