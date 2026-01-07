@@ -18,18 +18,18 @@ public class StudentController {
 
     @GetMapping(path = "/get/all")
     public ResponseEntity<List<Student>> getAllStudent(){
-            return new ResponseEntity<>(studentService.getAll(), HttpStatus.OK);
+        return new ResponseEntity<>(studentService.getAll(), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<?> saveStudent(@RequestBody Student student){
-           return new ResponseEntity<>(studentService.saveStudent(student), HttpStatus.CREATED);
+        return new ResponseEntity<>(studentService.saveStudent(student), HttpStatus.CREATED);
 
     }
 
     @DeleteMapping("/{matricule}")
     public ResponseEntity<?> deleteStudent(@PathVariable String matricule){
-            studentService.deleteStudent(matricule);
-            return new ResponseEntity<>("l'etudiant a été supprimé avec succès", HttpStatus.OK);
+        studentService.deleteStudent(matricule);
+        return new ResponseEntity<>("l'etudiant a été supprimé avec succès", HttpStatus.OK);
     }
 }

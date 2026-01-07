@@ -20,10 +20,10 @@ public class FiliereService {
     }
 
     public  Filiere saveFiliere(Filiere filiere){
-       if (filiereRepository.existsByLibelle(filiere.getLibelle())){
-           throw  new ExistFiliere("Cette filiere existe deja");
-       }
-       return filiereRepository.save(filiere);
+        if (filiereRepository.existsByLibelle(filiere.getLibelle())){
+            throw  new ExistFiliere("Cette filiere existe deja");
+        }
+        return filiereRepository.save(filiere);
     }
 
     public boolean deleteFiliere(Long id){
@@ -31,7 +31,7 @@ public class FiliereService {
         if (!filiereOptional.isPresent()){
             throw  new FiliereNotFound("La filiere d'id" + id + " n'existe pas");
         }
-         filiereRepository.deleteById(id);
+        filiereRepository.deleteById(id);
         return true;
     }
 
