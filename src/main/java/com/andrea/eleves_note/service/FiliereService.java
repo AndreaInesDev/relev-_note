@@ -43,4 +43,13 @@ public class FiliereService {
 
         throw new FiliereNotFound("Cette filiere n'existe pas");
     }
+
+    public Filiere updateFiliere(Long id, Filiere filiere1){
+        Filiere filiereExist = filiereRepository.findById(id)
+                .orElseThrow(() ->  new FiliereNotFound("Cette filiere n'existe pas"));
+
+        filiereExist.setLibelle(filiere1.getLibelle());
+
+        return filiereRepository.save(filiereExist);
+    }
 }
