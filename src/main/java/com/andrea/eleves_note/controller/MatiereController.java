@@ -8,7 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.Path;
 import java.util.List;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RequiredArgsConstructor
 @RestController
@@ -16,29 +19,41 @@ import java.util.List;
 public class MatiereController {
     private  final MatiereService matiereService;
 
-    @GetMapping
+    @GetMapping(path = "/find/all", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Matiere>> getAllMatiere(){
-        return new ResponseEntity<>(matiereService.getAllMatiere(), HttpStatus.OK);
+        List<Matiere> lis = matiereService.getAllMatiere();
+
+        return new ResponseEntity<>(lis, HttpStatus.OK);
+    }
+
+    @GetMapping("/get/{id}")
+    public ResponseEntity<Matiere> getMatiereById(@PathVariable Long id){
+        Matiere matiere = matiereService.getMatiereById(id);
+        return new ResponseEntity<>(matiere, HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<Matiere> saveMatiere(@RequestBody Matiere matiere){
-        return new ResponseEntity<>(matiereService.saveMatiere(matiere), HttpStatus.CREATED);
+        Matiere matiere1 = matiereService.saveMatiere(matiere);
+        return new ResponseEntity<>(matiere1, HttpStatus.CREATED);
     }
 
     @PostMapping("/batch")
     public ResponseEntity<?> saveAllMatiere(@RequestBody List<Matiere> matieres){
-        return new ResponseEntity<>(matiereService.saveAllMatiere(matieres), HttpStatus.CREATED);
+        List<Matiere> matiere = matiereService.saveAllMatiere(matieres);
+        return new ResponseEntity<>(matiere, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteMatiere(@PathVariable Long id){
-        return new ResponseEntity<>(matiereService.deleteMatiere(id), HttpStatus.OK);
+         matiereService.deleteMatiere(id);
+        return new ResponseEntity<>("Matiere supprimée avec succès", HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Matiere> updateMatiere(@PathVariable Long id, @RequestBody Matiere matiere ){
-        return new ResponseEntity<>(matiereService.updateMatiere(id, matiere), HttpStatus.CREATED);
+        Matiere matiere1 = matiereService.updateMatiere(id, matiere);
+        return new ResponseEntity<>(matiere1, HttpStatus.CREATED);
     }
 
 }

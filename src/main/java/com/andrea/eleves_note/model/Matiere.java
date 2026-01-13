@@ -2,13 +2,16 @@ package com.andrea.eleves_note.model;
 
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.Set;
 
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Matiere {
 
     @Id
@@ -19,9 +22,9 @@ public class Matiere {
 
     @ManyToOne
     @JoinColumn(name = "id_filiere")
-    @JsonIgnore
     private Filiere filiere;
 
     @OneToMany(mappedBy = "matiere" , cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Set<Note> notes;
 }

@@ -16,23 +16,27 @@ import java.util.List;
 public class NoteController {
     private final NoteService noteService;
 
-    @GetMapping
+    @GetMapping("get/all")
     public ResponseEntity<List<Note>> getAll(){
-        return new ResponseEntity<>(noteService.getAll(), HttpStatus.OK);
+        List<Note> note = noteService.getAll();
+        return new ResponseEntity<>(note, HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<?> saveNote(@RequestBody Note note){
-        return new ResponseEntity<>(noteService.saveNote(note), HttpStatus.CREATED);
+        Note note1 = noteService.saveNote(note);
+        return new ResponseEntity<>(note1, HttpStatus.CREATED);
     }
 
     @PostMapping("/all")
     public ResponseEntity<?> saveAllNote(@RequestBody List<Note> notes){
-        return new ResponseEntity<>(noteService.saveAllNote(notes), HttpStatus.CREATED);
+        List<Note> note = noteService.saveAllNote(notes);
+        return new ResponseEntity<>(note, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteNote(@PathVariable Long id){
-        return new ResponseEntity<>(noteService.deleteNote(id), HttpStatus.OK);
+        noteService.deleteNote(id);
+        return new ResponseEntity<>("Note supprimé avec succès", HttpStatus.OK);
     }
 }

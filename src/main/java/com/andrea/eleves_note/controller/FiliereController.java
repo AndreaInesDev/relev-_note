@@ -16,30 +16,33 @@ import java.util.List;
 public class FiliereController {
     private  final FiliereService filiereService;
 
-    @GetMapping
+    @GetMapping("get/all")
     public ResponseEntity<List<Filiere>> getAllFiliere(){
         return new ResponseEntity<>(filiereService.getAllFiliere(),HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getFiliere(@PathVariable Long id){
-        return new ResponseEntity<>(filiereService.getFiliere(id), HttpStatus.OK);
+        Filiere filiere = filiereService.getFiliere(id);
+        return new ResponseEntity<>(filiere, HttpStatus.OK);
     }
 
     @PostMapping
     public  ResponseEntity<?> saveFiliere(@RequestBody Filiere filiere){
-        return new ResponseEntity<>(filiereService.saveFiliere(filiere), HttpStatus.CREATED);
+        Filiere filiere1 = filiereService.saveFiliere(filiere);
+        return new ResponseEntity<>(filiere1, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public  ResponseEntity<?> deleteFiliere(@PathVariable Long id){
         filiereService.deleteFiliere(id);
         return new ResponseEntity<>("La filiere a été supprimée", HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public  ResponseEntity<Filiere> updateFiliere(Long id, Filiere filiere){
-        return new ResponseEntity<>(filiereService.updateFiliere(id, filiere), HttpStatus.CREATED);
+        Filiere filiere1 = filiereService.updateFiliere(id, filiere);
+        return new ResponseEntity<>(filiere1, HttpStatus.CREATED);
     }
 
 }

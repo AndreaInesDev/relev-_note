@@ -2,13 +2,16 @@ package com.andrea.eleves_note.model;
 
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.Set;
 
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Filiere {
 
     @Id
@@ -22,5 +25,6 @@ public class Filiere {
     private Set<Student> students;
 
     @OneToMany(mappedBy = "filiere", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private  Set<Matiere> matieres;
 }

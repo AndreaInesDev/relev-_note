@@ -17,13 +17,24 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MatiereService {
     private final MatiereRepository matiereRepository;
-    private  final FiliereRepository filiereRepository;
+    private final FiliereRepository filiereRepository;
 
     public List<Matiere> getAllMatiere(){
         return matiereRepository.findAll();
     }
 
+    public Matiere getMatiereById(Long id){
+        Matiere matiere = matiereRepository.findById(id)
+                .orElseThrow(() -> new MatiereNotFound("Cette matiere n'existe pas"));
+
+        return matiere;
+    }
+
     public Matiere saveMatiere(Matiere matiere){
+        if (matiere.getLibelle() != null){
+            throw new MatiereNotFound("Cette matiere existe deja");
+        }
+
         if (matiere.getFiliere() == null || matiere.getFiliere().getId() == null){
             throw new FiliereNotFound("filiere manquante");
         }
@@ -33,6 +44,8 @@ public class MatiereService {
             throw new FiliereNotFound("Cette filiere n'existe pas");
         }
         matiere.setFiliere(filiereOptional.get());
+
+
 
 
         return matiereRepository.save(matiere);

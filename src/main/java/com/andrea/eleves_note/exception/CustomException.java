@@ -46,6 +46,11 @@ public class CustomException {
         return builedResponse(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<AppiError> HandleRuntimeException(RuntimeException e){
+        return builedResponse(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
     private ResponseEntity<AppiError> builedResponse(String message, HttpStatus status){
         AppiError error = new AppiError();
 

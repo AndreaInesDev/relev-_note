@@ -23,18 +23,20 @@ public class StudentController {
 
     @PostMapping
     public ResponseEntity<?> saveStudent(@RequestBody Student student){
-        return new ResponseEntity<>(studentService.saveStudent(student), HttpStatus.CREATED);
+        Student student1 = studentService.saveStudent(student);
+        return new ResponseEntity<>(student1, HttpStatus.CREATED);
 
     }
 
-    @DeleteMapping("/{matricule}")
+    @DeleteMapping("/delete/{matricule}")
     public ResponseEntity<?> deleteStudent(@PathVariable String matricule){
         studentService.deleteStudent(matricule);
         return new ResponseEntity<>("l'etudiant a été supprimé avec succès", HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Student> updateStudent(@PathVariable String id, @RequestBody Student student){
-        return new ResponseEntity<>(studentService.updateStudent(id, student), HttpStatus.CREATED);
+        Student student1 = studentService.updateStudent(id, student);
+        return new ResponseEntity<>(student1, HttpStatus.CREATED);
     }
 }

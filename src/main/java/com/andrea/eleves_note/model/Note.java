@@ -3,11 +3,14 @@ package com.andrea.eleves_note.model;
 import com.andrea.eleves_note.Appreciations;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 
-@Data
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Note {
 
     @Id
@@ -21,11 +24,9 @@ public class Note {
 
     @ManyToOne
     @JoinColumn(name = "id_matiere")
-    @JsonIgnore
     private Matiere matiere;
 
     @ManyToOne
     @JoinColumn(name = "id_eleve")
-    @JsonIgnore
     private Student student;
 }

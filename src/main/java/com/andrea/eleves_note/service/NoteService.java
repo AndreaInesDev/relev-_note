@@ -30,7 +30,7 @@ public class NoteService {
     }
 
     public Note saveNote(Note  note){
-       /* if (note.getMatiere() == null || note.getMatiere().getId() == null){
+        if (note.getMatiere() == null || note.getMatiere().getId() == null){
             throw new MatiereNotFound("Vous n'avez pas renseigné la matiere");
         }
 
@@ -48,27 +48,36 @@ public class NoteService {
             throw new StudentNotFountException("Cet etudiant n'existe pas");
         }
 
-        note.setMatiere(note.getMatiere());
-        note.setStudent(note.getStudent());*/
+
 
         double appreciation = note.getValeur();
 
-        if (appreciation >= 1 && appreciation <= 10){
-            note.setApprecications(Appreciations.FAIBLE);
-        }else if (appreciation >= 10 && appreciation <= 11 ){
-            note.setApprecications(Appreciations.PASSABLE);
-        } else if (appreciation >= 12 && appreciation <= 13) {
-            note.setApprecications(Appreciations.ASSEZ_BIEN);
-        } else if (appreciation >= 14 && appreciation <= 15) {
-            note.setApprecications(Appreciations.BIEN);
-        } else if (appreciation >= 16 && appreciation <= 17) {
-            note.setApprecications(Appreciations.TRES_BIEN);
-        } else if (appreciation >= 18 && appreciation <= 20) {
-            note.setApprecications(Appreciations.PARFAIT);
-        }else {
+        if (appreciation < 1 || appreciation > 20){
             throw new RuntimeException("Impossible d'ajouter une valeur < 1 ou > 20");
+        }else if (appreciation < 10){
+            note.setApprecications(Appreciations.FAIBLE);
+        }else if (appreciation < 12 ){
+            note.setApprecications(Appreciations.PASSABLE);
+        } else if (appreciation < 14) {
+            note.setApprecications(Appreciations.ASSEZ_BIEN);
+        } else if (appreciation < 16) {
+            note.setApprecications(Appreciations.BIEN);
+        } else if (appreciation < 18) {
+            note.setApprecications(Appreciations.TRES_BIEN);
+        } else {
+            note.setApprecications(Appreciations.PARFAIT);
         }
 
+        Matiere matiere = matiereOptional.get();
+        Student student = studentOptional.get();
+
+        //on verifie si les matieres appartiennent à la filieres de l'etudiant
+        if (!matiere.getFiliere().getId().equals(student.getFiliere().getId())){
+            throw new RuntimeException("L'étudiant et la matière ne sont pas dans la même filière.");
+        }
+
+        note.setMatiere(note.getMatiere());
+        note.setStudent(note.getStudent());
         return noteRepository.save(note);
     }
 
@@ -82,7 +91,6 @@ public class NoteService {
     }
 
     public String deleteNote(Long id){
-        boolean notePresent = true;
         if (!noteRepository.findById(id).isPresent()){
             throw new NoteNotFount("Cette note n'existe pas");
         }

@@ -1,14 +1,18 @@
 package com.andrea.eleves_note.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.Set;
 
 @Entity
 @Table(name = "students")
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Student {
 
     @Id
@@ -25,6 +29,7 @@ public class Student {
     private Filiere filiere ;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Set<Note> notes;
 
 }

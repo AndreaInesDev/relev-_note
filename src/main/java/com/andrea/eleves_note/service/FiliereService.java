@@ -29,7 +29,7 @@ public class FiliereService {
     public boolean deleteFiliere(Long id){
         Optional<Filiere> filiereOptional = filiereRepository.findById(id);
         if (!filiereOptional.isPresent()){
-            throw  new FiliereNotFound("La filiere d'id" + id + " n'existe pas");
+            throw  new FiliereNotFound("La filiere d'id " + id + " n'existe pas");
         }
         filiereRepository.deleteById(id);
         return true;
