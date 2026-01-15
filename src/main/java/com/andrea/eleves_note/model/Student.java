@@ -22,6 +22,7 @@ public class Student {
     private String name;
     private  String username;
     private String address;
+    @Column(name = "matricule", unique = true)
     private String matricule;
 
     @ManyToOne

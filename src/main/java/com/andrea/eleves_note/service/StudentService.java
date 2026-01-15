@@ -28,7 +28,7 @@ public class StudentService {
             throw new ExistStudent("Cet etudiant de matricule " + student.getMatricule() + " existe deja");
         }
 
-        if (student.getFiliere() == null || student.getFiliere().getId() == null) {
+      /*  if (student.getFiliere() == null || student.getFiliere().getId() == null) {
             throw new FiliereNotFound("La filière est obligatoire pour enregistrer un étudiant.");
         }
 
@@ -37,7 +37,11 @@ public class StudentService {
                 .orElseThrow(() -> new FiliereNotFound("La filière spécifiée n'existe pas."));
 
 
-        student.setFiliere(filiere);
+        student.setFiliere(filiere);*/
+
+        if (student.getMatricule().length() != 8){
+            throw new RuntimeException("Le matricule doit avoir 8 charactères");
+        }
         return studentList.save(student);
     }
 
@@ -60,12 +64,12 @@ public class StudentService {
         student1.setUsername(student.getUsername());
         student1.setAddress(student.getAddress());
 
-        if (student.getFiliere() != null && student.getFiliere().getId() != null) {
+       /* if (student.getFiliere() != null && student.getFiliere().getId() != null) {
             Filiere newFiliere = filiereRepository.findById(student.getFiliere().getId())
                     .orElseThrow(() -> new FiliereNotFound("Impossible de mettre à jour : la nouvelle filière n'existe pas."));
             student1.setFiliere(newFiliere);
 
-        }
+        }*/
 
         return studentList.save(student1);
 

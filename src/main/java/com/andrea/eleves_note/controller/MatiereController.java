@@ -32,7 +32,7 @@ public class MatiereController {
         return new ResponseEntity<>(matiere, HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping(path = "/create")
     public ResponseEntity<Matiere> saveMatiere(@RequestBody Matiere matiere){
         Matiere matiere1 = matiereService.saveMatiere(matiere);
         return new ResponseEntity<>(matiere1, HttpStatus.CREATED);

@@ -31,8 +31,9 @@ public class MatiereService {
     }
 
     public Matiere saveMatiere(Matiere matiere){
-        if (matiere.getLibelle() != null){
-            throw new MatiereNotFound("Cette matiere existe deja");
+        Matiere matiere1 = matiereRepository.findByLibelleIgnoreCase(matiere.getLibelle());
+        if (matiere1 != null && matiere.getId() != matiere1.getId()){
+            throw new  MatiereNotFound("Cette matiere existe deja");
         }
 
         if (matiere.getFiliere() == null || matiere.getFiliere().getId() == null){
