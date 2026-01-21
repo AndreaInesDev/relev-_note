@@ -45,10 +45,6 @@ public class MatiereService {
             throw new FiliereNotFound("Cette filiere n'existe pas");
         }
         matiere.setFiliere(filiereOptional.get());
-
-
-
-
         return matiereRepository.save(matiere);
     }
 
@@ -73,7 +69,7 @@ public class MatiereService {
 
     public  Matiere updateMatiere(Long id, Matiere matiere){
         Matiere matiere1 = matiereRepository.findById(id)
-                .orElseThrow(() -> new MatiereNotFound("Cette matiere n'xiste pas"));
+                .orElseThrow(() -> new MatiereNotFound("Cette matiere n'existe pas"));
 
         matiere1.setLibelle(matiere.getLibelle());
         matiere1.setLibelle(matiere.getLibelle());
