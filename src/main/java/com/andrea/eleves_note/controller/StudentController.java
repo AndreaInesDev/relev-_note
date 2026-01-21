@@ -21,6 +21,13 @@ public class StudentController {
         return new ResponseEntity<>(studentService.getAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/moyenne/{id}")
+    public ResponseEntity<?> calculeMoyenne(@PathVariable Long id){
+        Double moyenne = studentService.moyenneEtudiant(id);
+
+        return new ResponseEntity<>(moyenne, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<?> saveStudent(@RequestBody Student student){
         Student student1 = studentService.saveStudent(student);
@@ -39,4 +46,6 @@ public class StudentController {
         Student student1 = studentService.updateStudent(id, student);
         return new ResponseEntity<>(student1, HttpStatus.CREATED);
     }
+
+
 }
