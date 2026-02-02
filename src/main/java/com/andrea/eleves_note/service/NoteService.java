@@ -1,6 +1,7 @@
 package com.andrea.eleves_note.service;
 
 import com.andrea.eleves_note.Appreciations;
+import com.andrea.eleves_note.dto.Moyennedto;
 import com.andrea.eleves_note.exception.MatiereNotFound;
 import com.andrea.eleves_note.exception.NoteNotFount;
 import com.andrea.eleves_note.exception.StudentNotFountException;
@@ -91,5 +92,48 @@ public class NoteService {
 
         noteRepository.deleteById(id);
         return "La note a été supprimée avec succès";
+    }
+
+    public Double moyenneEtudiant(Long id){
+        Student student = studentRepository.findById(id)
+                .orElseThrow(() -> new StudentNotFountException("Cet etudiant n'existe  pas"));
+
+        List<Note> noteList = noteRepository.findByStudentId(id);
+
+        if (noteList.isEmpty()){
+            return 0.0 ;
+        }
+
+        Double somme = 0.0;
+
+        for (int i = 0; i < noteList.size(); i++) {
+            somme = somme + noteList.get(i).getValeur();
+        }
+
+        Double moyenne = somme / noteList.size();
+
+        return  moyenne;
+    }
+
+    public List<Moyennedto> classementGeneral() {
+        // 1. Récupérer tous les étudiants de la base de données
+        List<Student> allStudents = studentRepository.findAll();
+
+        // 2. Créer une liste pour stocker nos résultats (Nom + Moyenne)
+        List<Moyennedto> classement = new ArrayList<>();
+
+        // 3. Boucler sur chaque étudiant pour calculer sa moyenne
+        for (Student student : allStudents) {
+            Double moyenne = moyenneEtudiant(student.getId());
+
+            // On ajoute le résultat dans notre liste de DTO
+            classement.add(new Moyennedto(student.getName(), moyenne));
+        }
+
+        // 4. Trier la liste par moyenne décroissante (du plus grand au plus petit)
+        // m2.getMoyenne().compareTo(m1.getMoyenne()) inverse l'ordre naturel (décroissant)
+        classement.sort((m1, m2) -> m2.moyenne().compareTo(m1.moyenne()));
+
+        return classement;
     }
 }

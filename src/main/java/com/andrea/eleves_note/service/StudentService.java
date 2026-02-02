@@ -2,8 +2,10 @@ package com.andrea.eleves_note.service;
 
 import com.andrea.eleves_note.exception.ExistStudent;
 import com.andrea.eleves_note.exception.FiliereNotFound;
+import com.andrea.eleves_note.exception.NoteNotFount;
 import com.andrea.eleves_note.exception.StudentNotFountException;
 import com.andrea.eleves_note.model.Filiere;
+import com.andrea.eleves_note.model.Matiere;
 import com.andrea.eleves_note.model.Note;
 import com.andrea.eleves_note.model.Student;
 import com.andrea.eleves_note.ripository.FiliereRepository;
@@ -61,26 +63,23 @@ public class StudentService {
 
     }
 
-    public Double moyenneEtudiant(Long id){
+
+
+    public boolean inscriptionStudent(Long id, Long idFiliere){
         Student student = studentList.findById(id)
-                .orElseThrow(() -> new StudentNotFountException("Cet etudiant n'existe  pas"));
+                .orElseThrow(() -> new StudentNotFountException("Cet etudiant n'existe pas"));
 
-        List<Note> noteList = noteRepository.findByStudentId(id);
+        Filiere filiere = filiereRepository.findById(idFiliere)
+                .orElseThrow(() -> new FiliereNotFound("Cette filiere n'existe pas"));
 
-        if (noteList.isEmpty()){
-            return 0.0 ;
+        if (studentList.existsByIdAndNotesIsNotEmpty(id)){
+            throw new NoteNotFount("Impossible de changer de filiere car vous avez deja au moin une note enregistré");
         }
 
-        Double somme = 0.0;
+        student.setFiliere(filiere);
 
-        for (int i = 0; i < noteList.size(); i++) {
-            somme = somme + noteList.get(i).getValeur();
-        }
+        studentList.save(student);
 
-        Double moyenne = somme / noteList.size();
-
-        return  moyenne;
-
-
+        return true;
     }
 }

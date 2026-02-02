@@ -1,6 +1,7 @@
 package com.andrea.eleves_note.controller;
 
 
+import com.andrea.eleves_note.dto.Moyennedto;
 import com.andrea.eleves_note.model.Note;
 import com.andrea.eleves_note.service.NoteService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,19 @@ public class NoteController {
         List<Note> note = noteService.getAll();
         return new ResponseEntity<>(note, HttpStatus.OK);
     }
+    @GetMapping("/moyenne/{id}")
+    public ResponseEntity<?> calculeMoyenne(@PathVariable Long id){
+        Double moyenne = noteService.moyenneEtudiant(id);
+
+        return new ResponseEntity<>(moyenne, HttpStatus.OK);
+    }
+
+    @GetMapping("/moyenne")
+    public ResponseEntity<?> moyenneEtudiant(){
+        List<Moyennedto> moyennedtoList = noteService.classementGeneral();
+
+        return new ResponseEntity<>(moyennedtoList, HttpStatus.OK);
+    }
 
     @PostMapping("/saveNote/{id1}/{id2}")
     public ResponseEntity<?> saveNote(@RequestBody Note note, @PathVariable Long id1,
@@ -29,11 +43,6 @@ public class NoteController {
         return new ResponseEntity<>(note1, HttpStatus.CREATED);
     }
 
-//    @PostMapping("/all")
-//    public ResponseEntity<?> saveAllNote(@RequestBody List<Note> notes){
-//        List<Note> note = noteService.saveAllNote(notes);
-//        return new ResponseEntity<>(note, HttpStatus.CREATED);
-//    }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteNote(@PathVariable Long id){

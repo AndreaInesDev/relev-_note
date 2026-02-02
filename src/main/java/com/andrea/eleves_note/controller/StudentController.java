@@ -1,6 +1,7 @@
 package com.andrea.eleves_note.controller;
 
 import com.andrea.eleves_note.model.Student;
+import com.andrea.eleves_note.service.NoteService;
 import com.andrea.eleves_note.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,18 +22,18 @@ public class StudentController {
         return new ResponseEntity<>(studentService.getAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/moyenne/{id}")
-    public ResponseEntity<?> calculeMoyenne(@PathVariable Long id){
-        Double moyenne = studentService.moyenneEtudiant(id);
-
-        return new ResponseEntity<>(moyenne, HttpStatus.OK);
-    }
-
     @PostMapping
     public ResponseEntity<?> saveStudent(@RequestBody Student student){
         Student student1 = studentService.saveStudent(student);
         return new ResponseEntity<>(student1, HttpStatus.CREATED);
 
+    }
+
+    @PostMapping("/inscription/{id1}/{id2}")
+    public  ResponseEntity<?> inscription(@PathVariable Long id1,
+                                               @PathVariable Long id2){
+        boolean student = studentService.inscriptionStudent(id1, id2);
+        return new ResponseEntity<>(student, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/delete/{matricule}")
