@@ -31,19 +31,21 @@ public class MatiereService {
     }
 
     public Matiere saveMatiere(Matiere matiere){
+
+//        if (matiere.getFiliere() == null || matiere.getFiliere().getId() == null){
+//            throw new FiliereNotFound("filiere manquante");
+//        }
+       Long idFil = matiere.getFiliere().getId();
+        Optional<Filiere> filiereOptional = filiereRepository.findById(idFil);
+        if (!filiereOptional.isPresent()){
+            throw new FiliereNotFound("Cette filiere n'existe pas ou filiere manquante");
+        }
+
         Matiere matiere1 = matiereRepository.findByLibelleIgnoreCase(matiere.getLibelle());
         if (matiere1 != null && matiere.getId() != matiere1.getId()){
             throw new  MatiereNotFound("Cette matiere existe deja");
         }
 
-        if (matiere.getFiliere() == null || matiere.getFiliere().getId() == null){
-            throw new FiliereNotFound("filiere manquante");
-        }
-       Long idFil = matiere.getFiliere().getId();
-        Optional<Filiere> filiereOptional = filiereRepository.findById(idFil);
-        if (!filiereOptional.isPresent()){
-            throw new FiliereNotFound("Cette filiere n'existe pas");
-        }
         matiere.setFiliere(filiereOptional.get());
         return matiereRepository.save(matiere);
     }
@@ -68,12 +70,26 @@ public class MatiereService {
     }
 
     public  Matiere updateMatiere(Long id, Matiere matiere){
-        Matiere matiere1 = matiereRepository.findById(id)
+        Matiere matiereUpdate = matiereRepository.findById(id)
                 .orElseThrow(() -> new MatiereNotFound("Cette matiere n'existe pas"));
 
-        matiere1.setLibelle(matiere.getLibelle());
-        matiere1.setLibelle(matiere.getLibelle());
+        Long filiereId = matiereUpdate.getFiliere().getId();
 
-        return matiereRepository.save(matiere1);
+        if (!matiereUpdate.getLibelle().equalsIgnoreCase(matiere.getLibelle())){
+            boolean matiereFiliere = matiereRepository.existsByLibelleIgnoreCaseAndFiliereId(matiere.getLibelle(),
+                    filiereId);
+
+            if (matiereFiliere){
+                throw new RuntimeException("La matiere " + matiere.getLibelle() +
+                        " existe déjà pour la filière " + matiereUpdate.getFiliere().getLibelle());
+            }
+        }
+
+        matiereUpdate.setLibelle(matiere.getLibelle());
+
+        return matiereRepository.save(matiereUpdate);
     }
+
 }
+
+

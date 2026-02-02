@@ -39,7 +39,7 @@ public class FiliereController {
         return new ResponseEntity<>("La filiere a été supprimée", HttpStatus.OK);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping(path = "/update/{id}")
     public  ResponseEntity<Filiere> updateFiliere(Long id, Filiere filiere){
         Filiere filiere1 = filiereService.updateFiliere(id, filiere);
         return new ResponseEntity<>(filiere1, HttpStatus.CREATED);

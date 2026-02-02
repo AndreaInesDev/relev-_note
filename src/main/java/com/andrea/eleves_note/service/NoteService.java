@@ -29,37 +29,41 @@ public class NoteService {
        return noteRepository.findAll();
     }
 
-    public Note saveNote(Note  note){
+    public Note saveNote(Note  note, Long idStudent, Long idMatiere){
+
+        Optional<Student> studentOption = studentRepository.findById(idStudent);
+
+        Optional<Matiere> matiereOption = matiereRepository.findById(idMatiere);
         if (note.getMatiere() == null || note.getMatiere().getId() == null){
             throw new MatiereNotFound("Vous n'avez pas renseigné la matiere");
         }
 
-        Optional<Matiere> matiereOptional =matiereRepository.findById(note.getMatiere().getId());
-        if (!matiereOptional.isPresent()){
-            throw new MatiereNotFound("Cette matiere n'existe pas");
-        }
+//        Optional<Matiere> matiereOptional =matiereRepository.findById(note.getMatiere().getId());
+//        if (!matiereOptional.isPresent()){
+//            throw new MatiereNotFound("Cette matiere n'existe pas");
+//        }
+//
+//        if (note.getStudent() == null || note.getStudent().getId() == null){
+//            throw new StudentNotFountException("Vous n'avez pas renseigné l'etudiant");
+//        }
 
-        if (note.getStudent() == null || note.getStudent().getId() == null){
-            throw new StudentNotFountException("Vous n'avez pas renseigné l'etudiant");
-        }
+//        Optional<Student> studentOptional = studentRepository.findById(note.getStudent().getId());
+//        if (!studentOptional.isPresent()){
+//            throw new StudentNotFountException("Cet etudiant n'existe pas");
+//        }
+        double noteValeur = note.getValeur();
 
-        Optional<Student> studentOptional = studentRepository.findById(note.getStudent().getId());
-        if (!studentOptional.isPresent()){
-            throw new StudentNotFountException("Cet etudiant n'existe pas");
-        }
-        double appreciation = note.getValeur();
-
-        if (appreciation < 1 || appreciation > 20){
+        if (noteValeur < 1 || noteValeur > 20){
             throw new RuntimeException("Impossible d'ajouter une valeur < 1 ou > 20");
-        }else if (appreciation < 10){
+        }else if (noteValeur < 10){
             note.setApprecications(Appreciations.FAIBLE);
-        }else if (appreciation < 12 ){
+        }else if (noteValeur < 12 ){
             note.setApprecications(Appreciations.PASSABLE);
-        } else if (appreciation < 14) {
+        } else if (noteValeur < 14) {
             note.setApprecications(Appreciations.ASSEZ_BIEN);
-        } else if (appreciation < 16) {
+        } else if (noteValeur < 16) {
             note.setApprecications(Appreciations.BIEN);
-        } else if (appreciation < 18) {
+        } else if (noteValeur < 18) {
             note.setApprecications(Appreciations.TRES_BIEN);
         } else {
             note.setApprecications(Appreciations.PARFAIT);
