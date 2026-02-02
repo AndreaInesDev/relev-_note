@@ -22,17 +22,18 @@ public class NoteController {
         return new ResponseEntity<>(note, HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<?> saveNote(@RequestBody Note note){
-        Note note1 = noteService.saveNote(note);
+    @PostMapping("/saveNote/{id1}/{id2}")
+    public ResponseEntity<?> saveNote(@RequestBody Note note, @PathVariable Long id1,
+                                      @PathVariable Long id2){
+        Note note1 = noteService.saveNote(note, id1, id2);
         return new ResponseEntity<>(note1, HttpStatus.CREATED);
     }
 
-    @PostMapping("/all")
-    public ResponseEntity<?> saveAllNote(@RequestBody List<Note> notes){
-        List<Note> note = noteService.saveAllNote(notes);
-        return new ResponseEntity<>(note, HttpStatus.CREATED);
-    }
+//    @PostMapping("/all")
+//    public ResponseEntity<?> saveAllNote(@RequestBody List<Note> notes){
+//        List<Note> note = noteService.saveAllNote(notes);
+//        return new ResponseEntity<>(note, HttpStatus.CREATED);
+//    }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteNote(@PathVariable Long id){

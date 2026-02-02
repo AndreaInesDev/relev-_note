@@ -31,26 +31,12 @@ public class NoteService {
 
     public Note saveNote(Note  note, Long idStudent, Long idMatiere){
 
-        Optional<Student> studentOption = studentRepository.findById(idStudent);
+        Student student = studentRepository.findById(idStudent)
+                .orElseThrow(() -> new StudentNotFountException("Étudiant introuvable avec l'ID : " + idStudent));
 
-        Optional<Matiere> matiereOption = matiereRepository.findById(idMatiere);
-        if (note.getMatiere() == null || note.getMatiere().getId() == null){
-            throw new MatiereNotFound("Vous n'avez pas renseigné la matiere");
-        }
+        Matiere matiere = matiereRepository.findById(idMatiere)
+                .orElseThrow(() -> new MatiereNotFound("Matière introuvable avec l'ID : " + idMatiere));
 
-//        Optional<Matiere> matiereOptional =matiereRepository.findById(note.getMatiere().getId());
-//        if (!matiereOptional.isPresent()){
-//            throw new MatiereNotFound("Cette matiere n'existe pas");
-//        }
-//
-//        if (note.getStudent() == null || note.getStudent().getId() == null){
-//            throw new StudentNotFountException("Vous n'avez pas renseigné l'etudiant");
-//        }
-
-//        Optional<Student> studentOptional = studentRepository.findById(note.getStudent().getId());
-//        if (!studentOptional.isPresent()){
-//            throw new StudentNotFountException("Cet etudiant n'existe pas");
-//        }
         double noteValeur = note.getValeur();
 
         if (noteValeur < 1 || noteValeur > 20){
@@ -69,28 +55,26 @@ public class NoteService {
             note.setApprecications(Appreciations.PARFAIT);
         }
 
-        Matiere matiere = matiereOptional.get();
-        Student student = studentOptional.get();
-
-        if (noteRepository.existsByStudentAndMatiere(student, matiere)) {
-            throw new RuntimeException("cette etudiant possede deja une note dans cette matiere");
-        }
 
         // 1. Vérification de sécurité pour éviter le NullPointerException
         if (student.getFiliere() == null) {
             throw new RuntimeException("L'étudiant " + student.getName() + " n'est inscrit dans aucune filière.");
         }
-        if (matiere.getFiliere() == null) {
-            throw new RuntimeException("La matière " + matiere.getLibelle() + " n'est rattachée à aucune filière.");
-        }
-
+//
+//        //je verifie que la matiere appartient à une filiere
+//        if (matiere.getFiliere() == null) {
+//            throw new RuntimeException("La matière " + matiere.getLibelle() + " n'est rattachée à aucune filière.");
+//        }
 
         //on verifie si les matieres appartiennent à la filieres de l'etudiant
         if (!matiere.getFiliere().getId().equals(student.getFiliere().getId())){
-            throw new RuntimeException("L'étudiant et la matière ne sont pas dans la même filière.");
+            throw new RuntimeException("cette matière n'est pas inscrite dans cette filière");
         }
 
         //on verifie si l'etudiant n'a pas deja de note sur cette matiere là
+        if (noteRepository.existsByStudentAndMatiere(student, matiere)) {
+            throw new RuntimeException("cette etudiant possède deja une note dans cette matiere");
+        }
 
 
         note.setMatiere(matiere);
@@ -98,14 +82,7 @@ public class NoteService {
         return noteRepository.save(note);
     }
 
-    public List<Note> saveAllNote(List<Note> notes){
-        List<Note> notes1 = new ArrayList<>();
-        for (Note note : notes){
-            notes1.add(this.saveNote(note));
-        }
 
-        return notes1;
-    }
 
     public String deleteNote(Long id){
         if (!noteRepository.findById(id).isPresent()){
