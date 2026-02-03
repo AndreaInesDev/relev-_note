@@ -31,22 +31,13 @@ public class MatiereService {
     }
 
     public Matiere saveMatiere(Matiere matiere){
-
-//        if (matiere.getFiliere() == null || matiere.getFiliere().getId() == null){
-//            throw new FiliereNotFound("filiere manquante");
-//        }
-       Long idFil = matiere.getFiliere().getId();
-        Optional<Filiere> filiereOptional = filiereRepository.findById(idFil);
-        if (!filiereOptional.isPresent()){
-            throw new FiliereNotFound("Cette filiere n'existe pas ou filiere manquante");
-        }
+      // Long idFil = matiere.getFiliere().getId();
 
         Matiere matiere1 = matiereRepository.findByLibelleIgnoreCase(matiere.getLibelle());
         if (matiere1 != null && matiere.getId() != matiere1.getId()){
             throw new  MatiereNotFound("Cette matiere existe deja");
         }
 
-        matiere.setFiliere(filiereOptional.get());
         return matiereRepository.save(matiere);
     }
 

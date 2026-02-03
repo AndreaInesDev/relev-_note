@@ -49,4 +49,12 @@ public class NoteController {
         noteService.deleteNote(id);
         return new ResponseEntity<>("Note supprimé avec succès", HttpStatus.OK);
     }
+
+    @GetMapping("/moyenneGenerale/{id}")
+    public ResponseEntity<?> moyenneGenerale(@PathVariable Long id){
+        Double moyennedtos = noteService.moyenneClasse(id);
+
+        return new ResponseEntity<>(moyennedtos, HttpStatus.OK);
+
+    }
 }

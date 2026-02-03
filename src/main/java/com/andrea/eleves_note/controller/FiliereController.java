@@ -40,9 +40,9 @@ public class FiliereController {
     }
 
     @PutMapping(path = "/update/{id}")
-    public  ResponseEntity<Filiere> updateFiliere(Long id, Filiere filiere){
+    public  ResponseEntity<Filiere> updateFiliere(@PathVariable Long id, @RequestBody Filiere filiere){
         Filiere filiere1 = filiereService.updateFiliere(id, filiere);
-        return new ResponseEntity<>(filiere1, HttpStatus.CREATED);
+        return new ResponseEntity<>(filiere1, HttpStatus.OK);
     }
 
 }

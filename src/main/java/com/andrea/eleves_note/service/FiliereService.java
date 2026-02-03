@@ -48,12 +48,6 @@ public class FiliereService {
         Filiere filiereExist = filiereRepository.findById(id)
                 .orElseThrow(() ->  new FiliereNotFound("Cette filiere n'existe pas"));
 
-//        boolean filiere = filiereRepository.existsByLibelle(filiere1.getLibelle());
-//
-//        if (filiere == true){
-//            throw new RuntimeException("Impossible de mettre à jour cette filiere car la nouvelle filiere renseignée existe deja");
-//        }
-
         filiereExist.setLibelle(filiere1.getLibelle());
 
         return filiereRepository.save(filiereExist);

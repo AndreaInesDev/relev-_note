@@ -11,4 +11,6 @@ public interface NoteRepository extends JpaRepository<Note , Long> {
     boolean existsByStudentAndMatiere(Student student, Matiere matiere);
 
     List<Note> findByStudentId(Long id);
+
+    List<Note> findByMatiereId(Long idMatiere);
 }

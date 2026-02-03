@@ -2,22 +2,23 @@ package com.andrea.eleves_note.service;
 
 import com.andrea.eleves_note.Appreciations;
 import com.andrea.eleves_note.dto.Moyennedto;
+import com.andrea.eleves_note.exception.FiliereNotFound;
 import com.andrea.eleves_note.exception.MatiereNotFound;
 import com.andrea.eleves_note.exception.NoteNotFount;
 import com.andrea.eleves_note.exception.StudentNotFountException;
+import com.andrea.eleves_note.model.Filiere;
 import com.andrea.eleves_note.model.Matiere;
 import com.andrea.eleves_note.model.Note;
 import com.andrea.eleves_note.model.Student;
+import com.andrea.eleves_note.ripository.FiliereRepository;
 import com.andrea.eleves_note.ripository.MatiereRepository;
 import com.andrea.eleves_note.ripository.NoteRepository;
 import com.andrea.eleves_note.ripository.StudentRepository;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +26,7 @@ public class NoteService {
     private final NoteRepository noteRepository;
     private final MatiereRepository matiereRepository;
     private final StudentRepository studentRepository;
+    private  final FiliereRepository filiereRepository;
 
     public List<Note> getAll(){
        return noteRepository.findAll();
@@ -135,5 +137,33 @@ public class NoteService {
         classement.sort((m1, m2) -> m2.moyenne().compareTo(m1.moyenne()));
 
         return classement;
+    }
+
+    public Double moyenneClasse(Long idFiliere){
+        Filiere filiere = filiereRepository.findById(idFiliere)
+                .orElseThrow(() -> new FiliereNotFound("Cette filiere n'existe pas"));
+
+        List<Student> studentList = studentRepository.findByFiliereId(idFiliere);
+
+        if (studentList.isEmpty()){
+            return 0.0;
+        }
+
+        Double moyenneGenerale = 0.0;
+        int etudiantAvecNotes = 0;
+
+        for (Student student : studentList){
+
+            List<Note> list = noteRepository.findByStudentId(student.getId());
+
+            if (!list.isEmpty()){
+                Double moyenneTotal = moyenneEtudiant(student.getId());
+                moyenneGenerale += moyenneTotal;
+                etudiantAvecNotes++;
+
+            }
+        }
+
+        return  (etudiantAvecNotes == 0) ? 0.0 : moyenneGenerale / etudiantAvecNotes ;
     }
 }

@@ -42,9 +42,9 @@ public class StudentController {
         return new ResponseEntity<>("l'etudiant a été supprimé avec succès", HttpStatus.OK);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Student> updateStudent(@PathVariable String id, @RequestBody Student student){
-        Student student1 = studentService.updateStudent(id, student);
+    @PutMapping("/update/{matricule}")
+    public ResponseEntity<Student> updateStudent(@PathVariable String matricule, @RequestBody Student student){
+        Student student1 = studentService.updateStudent(matricule, student);
         return new ResponseEntity<>(student1, HttpStatus.CREATED);
     }
 
