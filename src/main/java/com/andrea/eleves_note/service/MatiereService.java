@@ -31,7 +31,6 @@ public class MatiereService {
     }
 
     public Matiere saveMatiere(Matiere matiere){
-      // Long idFil = matiere.getFiliere().getId();
 
         Matiere matiere1 = matiereRepository.findByLibelleIgnoreCase(matiere.getLibelle());
         if (matiere1 != null && matiere.getId() != matiere1.getId()){
@@ -76,9 +75,24 @@ public class MatiereService {
             }
         }
 
+//        if (matiereRepository.existsByLibelleIgnoreCase(matiere.getLibelle())){
+//            throw new RuntimeException("Cette matiere existe deja pour cette filiere");
+//        }
+
         matiereUpdate.setLibelle(matiere.getLibelle());
 
         return matiereRepository.save(matiereUpdate);
+    }
+
+    public Matiere inscriptionMatiereFiliere(Long idMatiere, Long idFiliere){
+        Matiere matiere = matiereRepository.findById(idMatiere)
+                .orElseThrow(() -> new MatiereNotFound("Cette matiere n'existe pas"));
+
+        Filiere filiere = filiereRepository.findById(idFiliere)
+                .orElseThrow(() -> new FiliereNotFound("Cette filiere n'existe pas"));
+
+        matiere.setFiliere(filiere);
+        return matiereRepository.save(matiere) ;
     }
 
 }

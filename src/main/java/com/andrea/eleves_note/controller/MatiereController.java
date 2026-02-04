@@ -1,6 +1,7 @@
 package com.andrea.eleves_note.controller;
 
 
+import com.andrea.eleves_note.model.Filiere;
 import com.andrea.eleves_note.model.Matiere;
 import com.andrea.eleves_note.service.MatiereService;
 import lombok.RequiredArgsConstructor;
@@ -54,6 +55,12 @@ public class MatiereController {
     public ResponseEntity<Matiere> updateMatiere(@PathVariable Long id, @RequestBody Matiere matiere ){
         Matiere matiere1 = matiereService.updateMatiere(id, matiere);
         return new ResponseEntity<>(matiere1, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/inscriptionFiliere/{id1}/{id2}")
+    public ResponseEntity<?> inscription(@PathVariable Long id1, @PathVariable Long id2){
+        Matiere matiere = matiereService.inscriptionMatiereFiliere(id1, id2);
+        return  new ResponseEntity<>(matiere, HttpStatus.CREATED);
     }
 
 }

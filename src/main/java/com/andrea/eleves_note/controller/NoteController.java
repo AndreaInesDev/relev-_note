@@ -2,7 +2,9 @@ package com.andrea.eleves_note.controller;
 
 
 import com.andrea.eleves_note.dto.Moyennedto;
+import com.andrea.eleves_note.model.Filiere;
 import com.andrea.eleves_note.model.Note;
+import com.andrea.eleves_note.service.FiliereService;
 import com.andrea.eleves_note.service.NoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import java.util.List;
 @RequestMapping("/notes")
 public class NoteController {
     private final NoteService noteService;
+    private final FiliereService filiereService;
 
     @GetMapping("get/all")
     public ResponseEntity<List<Note>> getAll(){
@@ -54,7 +57,9 @@ public class NoteController {
     public ResponseEntity<?> moyenneGenerale(@PathVariable Long id){
         Double moyennedtos = noteService.moyenneClasse(id);
 
-        return new ResponseEntity<>(moyennedtos, HttpStatus.OK);
+        String filiere = filiereService.getFiliere(id).getLibelle();
+
+        return new ResponseEntity<>("moyenne générale de la filière " + filiere + " : "  + moyennedtos, HttpStatus.OK);
 
     }
 }

@@ -15,7 +15,9 @@ import com.andrea.eleves_note.ripository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -30,31 +32,44 @@ public class StudentService {
     }
 
     public Student saveStudent(Student student) {
-        if (studentList.existsByMatricule(student.getMatricule())) {
-            throw new ExistStudent("Cet etudiant de matricule " + student.getMatricule() + " existe deja");
+
+        student.setMatricule(genererMatricule());
+
+        while (studentList.existsByMatricule(student.getMatricule())){
+            student.setMatricule(genererMatricule());
         }
 
-        if (student.getMatricule().length() != 8){
-            throw new RuntimeException("Le matricule doit avoir 8 charactères");
-        }
+//        if (studentList.existsByMatricule(student.getMatricule())) {
+//            throw new ExistStudent("Cet etudiant de matricule " + student.getMatricule() + " existe deja");
+//        }
+
+//        if (student.getMatricule().length() != 8){
+//            throw new RuntimeException("Le matricule doit avoir 8 charactères");
+//        }
         return studentList.save(student);
     }
 
-    public void deleteStudent(String matricule) {
-        Student student = studentList.findByMatricule(matricule);
+    private String genererMatricule() {
+        //LocalDate.now donne la date d'aujourdhui et le getYear recupere uniquement l'annee
+        int annee = LocalDate.now().getYear();
 
-        if (student == null) {
-            throw new StudentNotFountException("Cet etudiant n'existe pas");
-        }
+        char lettre = (char) ('A' + new Random().nextInt(26));
+
+        int nombre = 10 + new Random().nextInt(90);
+        System.out.println(annee);
+        return String.format("%d-%c%d", annee, lettre, nombre);
+    }
+
+    public void deleteStudent(Long id) {
+        Student student = studentList.findById(id)
+                .orElseThrow(() -> new StudentNotFountException("Cet etudiant n'existe pas"));
+
         studentList.delete(student);
     }
 
-    public Student updateStudent(String matricule, Student student) {
-        Student student1 = studentList.findByMatricule(matricule);
-        if (student1 == null) {
-            throw new StudentNotFountException("Cet etudiant n'existe pas");
-        }
-
+    public Student updateStudent(Long id, Student student) {
+        Student student1 = studentList.findById(id)
+                .orElseThrow(() -> new StudentNotFountException("Cet etudiant n'existe pas"));
         student1.setName(student.getName());
         student1.setUsername(student.getUsername());
         student1.setAddress(student.getAddress());

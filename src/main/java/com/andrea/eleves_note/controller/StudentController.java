@@ -36,15 +36,15 @@ public class StudentController {
         return new ResponseEntity<>(student, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/delete/{matricule}")
-    public ResponseEntity<?> deleteStudent(@PathVariable String matricule){
-        studentService.deleteStudent(matricule);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteStudent(@PathVariable Long id){
+        studentService.deleteStudent(id);
         return new ResponseEntity<>("l'etudiant a été supprimé avec succès", HttpStatus.OK);
     }
 
-    @PutMapping("/update/{matricule}")
-    public ResponseEntity<Student> updateStudent(@PathVariable String matricule, @RequestBody Student student){
-        Student student1 = studentService.updateStudent(matricule, student);
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Student> updateStudent(@PathVariable Long id, @RequestBody Student student){
+        Student student1 = studentService.updateStudent(id, student);
         return new ResponseEntity<>(student1, HttpStatus.CREATED);
     }
 

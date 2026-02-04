@@ -164,6 +164,6 @@ public class NoteService {
             }
         }
 
-        return  (etudiantAvecNotes == 0) ? 0.0 : moyenneGenerale / etudiantAvecNotes ;
+        return   (etudiantAvecNotes == 0) ? 0.0 : moyenneGenerale / etudiantAvecNotes ;
     }
 }
