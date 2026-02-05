@@ -22,6 +22,13 @@ public class StudentController {
         return new ResponseEntity<>(studentService.getAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/etudiantsNotes")
+    public ResponseEntity<?> listeDesEtudiantsNotes(){
+        List<Student> students = studentService.etudiantAyantNote();
+
+        return new ResponseEntity<>(students, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<?> saveStudent(@RequestBody Student student){
         Student student1 = studentService.saveStudent(student);

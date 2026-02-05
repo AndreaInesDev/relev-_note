@@ -33,6 +33,12 @@ public class MatiereController {
         return new ResponseEntity<>(matiere, HttpStatus.OK);
     }
 
+    @GetMapping("/matiereParFiliere/{id}")
+    public ResponseEntity<?> matiereParFiliere(@PathVariable Long id){
+        List<Matiere> matiereList = matiereService.listeMatiere(id);
+        return new ResponseEntity<>(matiereList, HttpStatus.OK);
+    }
+
     @PostMapping(path = "/create")
     public ResponseEntity<Matiere> saveMatiere(@RequestBody Matiere matiere){
         Matiere matiere1 = matiereService.saveMatiere(matiere);

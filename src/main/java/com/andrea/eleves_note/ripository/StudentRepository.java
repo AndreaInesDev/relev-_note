@@ -12,4 +12,5 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     boolean existsByIdAndNotesIsNotEmpty(Long id);
 
     List<Student> findByFiliereId(Long idFiliere);
+    List<Student> findByNotesIsNotEmpty();
 }

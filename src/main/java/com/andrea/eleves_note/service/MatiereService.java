@@ -95,6 +95,14 @@ public class MatiereService {
         return matiereRepository.save(matiere) ;
     }
 
+    public List<Matiere> listeMatiere(Long idFiliere){
+
+        if (!filiereRepository.existsById(idFiliere)) {
+            throw new FiliereNotFound("Cette filiere n'existe pas");
+        }
+       return matiereRepository.findByFiliereId(idFiliere);
+    }
+
 }
 
 

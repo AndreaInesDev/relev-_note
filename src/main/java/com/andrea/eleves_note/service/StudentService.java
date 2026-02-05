@@ -1,12 +1,9 @@
 package com.andrea.eleves_note.service;
 
-import com.andrea.eleves_note.exception.ExistStudent;
 import com.andrea.eleves_note.exception.FiliereNotFound;
 import com.andrea.eleves_note.exception.NoteNotFount;
 import com.andrea.eleves_note.exception.StudentNotFountException;
 import com.andrea.eleves_note.model.Filiere;
-import com.andrea.eleves_note.model.Matiere;
-import com.andrea.eleves_note.model.Note;
 import com.andrea.eleves_note.model.Student;
 import com.andrea.eleves_note.ripository.FiliereRepository;
 import com.andrea.eleves_note.ripository.MatiereRepository;
@@ -39,13 +36,6 @@ public class StudentService {
             student.setMatricule(genererMatricule());
         }
 
-//        if (studentList.existsByMatricule(student.getMatricule())) {
-//            throw new ExistStudent("Cet etudiant de matricule " + student.getMatricule() + " existe deja");
-//        }
-
-//        if (student.getMatricule().length() != 8){
-//            throw new RuntimeException("Le matricule doit avoir 8 charactères");
-//        }
         return studentList.save(student);
     }
 
@@ -78,8 +68,6 @@ public class StudentService {
 
     }
 
-
-
     public boolean inscriptionStudent(Long id, Long idFiliere){
         Student student = studentList.findById(id)
                 .orElseThrow(() -> new StudentNotFountException("Cet etudiant n'existe pas"));
@@ -96,5 +84,11 @@ public class StudentService {
         studentList.save(student);
 
         return true;
+    }
+
+    public List<Student> etudiantAyantNote(){
+        List<Student> students = studentList.findByNotesIsNotEmpty();
+
+        return students;
     }
 }
