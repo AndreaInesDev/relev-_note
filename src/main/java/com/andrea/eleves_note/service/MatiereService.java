@@ -18,23 +18,25 @@ import java.util.Optional;
 public class MatiereService {
     private final MatiereRepository matiereRepository;
     private final FiliereRepository filiereRepository;
+    private static final String MATIERE_NOT_FOUND_MSG = "Cette matiere n'existe pas";
 
     public List<Matiere> getAllMatiere(){
         return matiereRepository.findAll();
     }
 
-    public Matiere getMatiereById(Long id){
-        Matiere matiere = matiereRepository.findById(id)
-                .orElseThrow(() -> new MatiereNotFound("Cette matiere n'existe pas"));
 
-        return matiere;
+    public Matiere getMatiereById(Long id){
+
+            return matiereRepository.findById(id)
+                .orElseThrow(() -> new MatiereNotFound(MATIERE_NOT_FOUND_MSG));
+
     }
 
     public Matiere saveMatiere(Matiere matiere){
 
         Matiere matiere1 = matiereRepository.findByLibelleIgnoreCase(matiere.getLibelle());
-        if (matiere1 != null && matiere.getId() != matiere1.getId()){
-            throw new  MatiereNotFound("Cette matiere existe deja");
+         if (matiere1 != null && !matiere.getId().equals(matiere1.getId())){
+            throw new  MatiereNotFound(MATIERE_NOT_FOUND_MSG);
         }
 
         return matiereRepository.save(matiere);
@@ -53,7 +55,7 @@ public class MatiereService {
     public boolean deleteMatiere(Long id){
         Optional<Matiere> optionalMatiere = matiereRepository.findById(id);
         if (!optionalMatiere.isPresent()){
-            throw new MatiereNotFound("Cette matiere n'existe pas");
+            throw new MatiereNotFound(MATIERE_NOT_FOUND_MSG);
         }
         matiereRepository.deleteById(id);
         return true;
@@ -61,7 +63,7 @@ public class MatiereService {
 
     public  Matiere updateMatiere(Long id, Matiere matiere){
         Matiere matiereUpdate = matiereRepository.findById(id)
-                .orElseThrow(() -> new MatiereNotFound("Cette matiere n'existe pas"));
+                .orElseThrow(() -> new MatiereNotFound(MATIERE_NOT_FOUND_MSG));
 
         Long filiereId = matiereUpdate.getFiliere().getId();
 
@@ -70,14 +72,10 @@ public class MatiereService {
                     filiereId);
 
             if (matiereFiliere){
-                throw new RuntimeException("La matiere " + matiere.getLibelle() +
+                throw new MatiereNotFound("La matiere " + matiere.getLibelle() +
                         " existe déjà pour la filière " + matiereUpdate.getFiliere().getLibelle());
             }
         }
-
-//        if (matiereRepository.existsByLibelleIgnoreCase(matiere.getLibelle())){
-//            throw new RuntimeException("Cette matiere existe deja pour cette filiere");
-//        }
 
         matiereUpdate.setLibelle(matiere.getLibelle());
 
@@ -86,7 +84,7 @@ public class MatiereService {
 
     public Matiere inscriptionMatiereFiliere(Long idMatiere, Long idFiliere){
         Matiere matiere = matiereRepository.findById(idMatiere)
-                .orElseThrow(() -> new MatiereNotFound("Cette matiere n'existe pas"));
+                .orElseThrow(() -> new MatiereNotFound(MATIERE_NOT_FOUND_MSG));
 
         Filiere filiere = filiereRepository.findById(idFiliere)
                 .orElseThrow(() -> new FiliereNotFound("Cette filiere n'existe pas"));

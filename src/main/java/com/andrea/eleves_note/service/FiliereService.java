@@ -23,6 +23,7 @@ public class FiliereService {
         if (filiereRepository.existsByLibelle(filiere.getLibelle())){
             throw  new ExistFiliere("Cette filiere existe deja");
         }
+
         return filiereRepository.save(filiere);
     }
 
@@ -49,7 +50,7 @@ public class FiliereService {
                 .orElseThrow(() ->  new FiliereNotFound("Cette filiere n'existe pas"));
 
         if (filiereRepository.existsByLibelle(filiere1.getLibelle())){
-            throw new RuntimeException("Cette filiere existe deja");
+            throw new FiliereNotFound("Cette filiere existe deja");
         }
 
         filiereExist.setLibelle(filiere1.getLibelle());

@@ -19,7 +19,7 @@ public class Note {
 
     private double valeur;
 
-   // @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     private Appreciations apprecications;
 
     @ManyToOne

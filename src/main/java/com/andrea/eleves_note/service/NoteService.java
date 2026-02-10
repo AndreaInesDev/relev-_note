@@ -42,21 +42,7 @@ public class NoteService {
 
         double noteValeur = note.getValeur();
 
-        if (noteValeur < 1 || noteValeur > 20){
-            throw new RuntimeException("Impossible d'ajouter une valeur < 1 ou > 20");
-        }else if (noteValeur < 10){
-            note.setApprecications(Appreciations.FAIBLE);
-        }else if (noteValeur < 12 ){
-            note.setApprecications(Appreciations.PASSABLE);
-        } else if (noteValeur < 14) {
-            note.setApprecications(Appreciations.ASSEZ_BIEN);
-        } else if (noteValeur < 16) {
-            note.setApprecications(Appreciations.BIEN);
-        } else if (noteValeur < 18) {
-            note.setApprecications(Appreciations.TRES_BIEN);
-        } else {
-            note.setApprecications(Appreciations.PARFAIT);
-        }
+        note.setApprecications(Appreciations.getFromNote(noteValeur));
 
 
         // 1. Vérification de sécurité pour éviter le NullPointerException
